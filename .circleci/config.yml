@@ -9,6 +9,8 @@ jobs:
       - image: cimg/postgres:14.5.0
     working_directory: ~/demo2
     #parallelism: 
+     
+
     resource_class: large
     environment:
       # Customize the JVM maximum heap limit
@@ -21,7 +23,8 @@ jobs:
           - v1-dependencies-{{ checksum "pom.xml" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
-      - run: mvn dependency:go-offline   
+      - run: mvn dependency:go-offline  
+      - run: circleci tests glob "**/*.rb" | circleci tests split --split-by=timings --time-default=10s 
       #- run: sudo apt update && sudo apt install wget 
       #- run: wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
       #- run: sudo apt install ./google-chrome-stable_current_amd64.deb 
