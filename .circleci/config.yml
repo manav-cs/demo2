@@ -4,9 +4,9 @@ jobs:
     machine:
       image: ubuntu-2004:current
       docker_layer_caching: true
-    Docker:
-      - image: cimg/go:1.17
-      - image: cimg/postgres:14.5.0
+    #Docker:
+     # - image: cimg/go:1.17
+      #- image: cimg/postgres:14.5.0
     working_directory: ~/demo2
     #parallelism: 
      
@@ -42,7 +42,7 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
       # run tests!
-      - run: mvn clean verify -Dthreads=single -Denv=stage_up -Dbrowser=ch -Dcucumber.filter.tags="@UP_signIn" -Dmaven.test.failure.ignore=true
+      - run: mvn clean install
       - store_artifacts: 
           path: target/surefire-reports
           destination: tr1
