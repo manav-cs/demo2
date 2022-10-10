@@ -1,0 +1,50 @@
+version: 2
+jobs:
+  build:
+    machine:
+      image: ubuntu-2004:current
+      docker_layer_caching: true
+    Docker:
+      - image: cimg/go:1.17
+      - image: cimg/postgres:14.5.0
+    working_directory: ~/demo2
+    #parallelism: 
+     
+
+    resource_class: large
+    environment:
+      # Customize the JVM maximum heap limit
+      MAVEN_OPTS: -Xmx3200m  
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "pom.xml" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+      - run: mvn dependency:go-offline  
+      #- run: circleci tests glob "**/*.rb" | circleci tests split --split-by=timings --time-default=10s 
+      #- run: sudo apt update && sudo apt install wget 
+      #- run: wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+      #- run: sudo apt install ./google-chrome-stable_current_amd64.deb 
+      #- run: apt install chromium-chromedriver
+      #- run: google-chrome --version
+      - run:
+          name: Running X virtual framebuffer
+          command: Xvfb :0 -ac &
+      - run:
+          name: Run Tests
+          command: |
+            export DISPLAY=:99
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "pom.xml" }}
+      # run tests!
+      - run: mvn clean verify -Dthreads=single -Denv=stage_up -Dbrowser=ch -Dcucumber.filter.tags="@UP_signIn" -Dmaven.test.failure.ignore=true
+      - store_artifacts: 
+          path: target/surefire-reports
+          destination: tr1
+      - store_test_results:
+          path: target/surefire-reports 
