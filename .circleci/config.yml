@@ -15,6 +15,9 @@ jobs:
     environment:
       # Customize the JVM maximum heap limit
       MAVEN_OPTS: -Xmx3200m  
+      ENV: stage_up
+      Browser: ch
+      Tag: UP_signIn
     steps:
       - checkout
       # Download and cache dependencies
@@ -42,9 +45,9 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
       # run tests!
-      - run: mvn clean install
+      - run: mvn clean verify -Dthreads=single -Denv={ENV} -Dbrowser={Browser} -Dcucumber.filter.tags="@{Tag}" -Dmaven.test.failure.ignore=true
       - store_artifacts: 
           path: target/surefire-reports
           destination: tr1
       - store_test_results:
-          path: target/surefire-reports 
+          path: target/cucumber-report-html/cucumber-html-reports/* 
