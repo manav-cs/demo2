@@ -9,8 +9,6 @@ jobs:
       #- image: cimg/postgres:14.5.0
     working_directory: ~/demo2
     #parallelism: 
-     
-
     resource_class: large
     environment:
       # Customize the JVM maximum heap limit
@@ -50,4 +48,4 @@ jobs:
           path: target/surefire-reports
           destination: tr1
       - store_test_results:
-          path: target/cucumber-report-html/cucumber-html-reports/* 
+          path: target/surefire-reports
