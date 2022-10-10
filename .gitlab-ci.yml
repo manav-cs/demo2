@@ -1,0 +1,16 @@
+variables:
+  ENV: env goes here from hook class
+  Browser: ch
+  Tag: pipeline
+
+image: markhobson/maven-chrome:latest
+
+test:
+  stage: test
+  script:
+    - mvn clean verify -Denv=${ENV} -Dbrowser=${Browser} -Dcucumber.filter.tags=${Tag} -Dmaven.test.failure.ignore=true
+
+  artifacts:
+    when: always
+    paths:
+      - target/cucumber-report-html/cucumber-html-reports/*

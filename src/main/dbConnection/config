@@ -1,0 +1,9 @@
+Host tunnel
+  HostName ec2-18-234-188-204.compute-1.amazonaws.com
+  User calford
+  IdentityFile ~//src/test/resources/codecommit_rsa
+  LocalForward 54321 carsaver-beta-cluster.cluster-ctqmxtymvucy.us-east-1.rds.amazonaws.com:5432
+  LocalForward 54322 carsaver-beta-cluster.cluster-ro-ctqmxtymvucy.us-east-1.rds.amazonaws.com:5432
+  LocalForward 54171 rebates-beta.cluster-ctqmxtymvucy.us-east-1.rds.amazonaws.com:5417
+  LocalForward 63791 carsaver-beta.3f0onc.0001.use1.cache.amazonaws.com:6379
+  LocalForward 63792 rebates-beta.3f0onc.0001.use1.cache.amazonaws.com:6379
