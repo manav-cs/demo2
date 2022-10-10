@@ -45,6 +45,7 @@ jobs:
       # run tests!
       - run: mvn clean verify -Dthreads=single -Denv=${ENV} -Dbrowser=${Browser} -Dcucumber.filter.tags="${Tag}" -Dmaven.test.failure.ignore=true
       - store_artifacts: 
-          path: target/cucumber-report-html/cucumber-html-reports/*
+          path: target/surefire-reports
+          destination: tr1
       - store_test_results:
-          path: target/cucumber-report-html/cucumber-html-reports/*
+          path: target/surefire-reports
