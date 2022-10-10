@@ -39,8 +39,7 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
       # run tests!
-      - run: mvn clean install 
-
+      - run: mvn clean verify -Dthreads=single -Denv=stage_up -Dbrowser=ch -Dcucumber.filter.tags="@UP_signIn" -Dmaven.test.failure.ignore=true
       - store_artifacts: 
           path: target/surefire-reports
           destination: tr1
