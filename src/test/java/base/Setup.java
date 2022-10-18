@@ -16,6 +16,8 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.safari.SafariOptions;
 
+import java.time.Duration;
+
 public class Setup {
     public WebDriver driver;
     public static DesiredCapabilities caps = new DesiredCapabilities();
@@ -58,9 +60,11 @@ public class Setup {
             caps.setCapability(InternetExplorerDriver.FORCE_CREATE_PROCESS, true);
             caps.setCapability(InternetExplorerDriver.IE_SWITCHES, "-private");
             driver = new InternetExplorerDriver(options);
-        } else if (driverType.equalsIgnoreCase("ie")){
+        } else if (driverType.equalsIgnoreCase("sf")) {
             WebDriverManager.safaridriver().setup();
             SafariOptions options = new SafariOptions();
+            //caps.setCapability(SafariDriver.FORCE_CREATE_PROCESS, true);
+            //caps.setCapability(SafariDriver.IE_SWITCHES, "-private");
             driver = new SafariDriver(options);
         }
         driver.manage().deleteAllCookies();
