@@ -57,6 +57,10 @@ public class Setup {
             caps.setCapability(InternetExplorerDriver.FORCE_CREATE_PROCESS, true);
             caps.setCapability(InternetExplorerDriver.IE_SWITCHES, "-private");
             driver = new InternetExplorerDriver(options);
+        } else if (driverType.equalsIgnoreCase("ie")){
+            WebDriverManager.safaridriver().setup();
+            SafariOptions options = new SafariOptions();
+            driver = new SafariDriver(options);
         }
         driver.manage().deleteAllCookies();
         driver.manage().window().maximize();
