@@ -61,7 +61,7 @@ public class Setup {
             caps.setCapability(InternetExplorerDriver.IE_SWITCHES, "-private");
             driver = new InternetExplorerDriver(options);
         } else if (driverType.equalsIgnoreCase("safari")) {
-            WebDriverManager.safaridriver().setup();
+            WebDriverManager.safaridriver().driverVersion("14.1.2").setup();
             SafariOptions options = new SafariOptions();
             driver = new SafariDriver(options);
         }
