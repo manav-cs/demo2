@@ -42,6 +42,7 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
       # run tests!
+      - run: sudo /usr/bin/safaridriver --enable
       - run: mvn clean verify -Dthreads=single -Denv=${ENV} -Dbrowser=${Browser} -Dcucumber.filter.tags="${Tag}" -Dmaven.test.failure.ignore=true
       - store_artifacts: 
           path: target/surefire-reports
