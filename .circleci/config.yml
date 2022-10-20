@@ -14,7 +14,7 @@ jobs:
       # Customize the JVM maximum heap limit
       MAVEN_OPTS: -Xmx3200m   
       ENV: 'stage_up'
-      Browser: 'sf'
+      Browser: 'safari'
       Tag: '@UP_signIn'
     steps:
       - checkout
