@@ -1,8 +1,9 @@
 version: 2
 jobs:
-  build: # name of your job
-    macos: # executor type
-      xcode: 12.5.1
+  build:
+    machine:
+      image: ubuntu-2004:current
+      docker_layer_caching: true
     #Docker:
      # - image: cimg/go:1.17
       #- image: cimg/postgres:14.5.0
