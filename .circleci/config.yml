@@ -13,13 +13,13 @@ jobs:
     parameters:
       ENV:
         type: string
-        default: ""
+        default: "stage_up"
       Browser:
         type: string
-        default: ""
+        default: "ch"
       Tag:
         type: string
-        default: ""
+        default: "@UP_signIn"
     environment:
       # Customize the JVM maximum heap limit
       MAVEN_OPTS: -Xmx3200m   
