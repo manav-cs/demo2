@@ -16,7 +16,7 @@ jobs:
         default: "stage_up"
       Browser:
         type: string
-        default: "ch"
+        default: "ff"
       Tag:
         type: string
         default: "@UP_signIn"
