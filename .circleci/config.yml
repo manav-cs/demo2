@@ -23,9 +23,9 @@ jobs:
     environment:
       # Customize the JVM maximum heap limit
       MAVEN_OPTS: -Xmx3200m   
-      ENV: << parameters.ENV >>
-      Browser: << parameters.Browser >>
-      Tag: << parameters.Tag >>
+      ENV_UP: << parameters.ENV >>
+      Browser_UP: << parameters.Browser >>
+      Tag_UP: << parameters.Tag >>
     steps:
       - checkout
       # Download and cache dependencies
@@ -54,7 +54,7 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
       # run tests!
       #- run: sudo safaridriver --enable
-      - run: mvn clean verify -Dthreads=single -Denv=${ENV} -Dbrowser=${Browser} -Dcucumber.filter.tags="${Tag}" -Dmaven.test.failure.ignore=true
+      - run: mvn clean verify -Dthreads=single -Denv=${ENV_UP} -Dbrowser=${Browser_UP} -Dcucumber.filter.tags="${Tag_UP}" -Dmaven.test.failure.ignore=true
       - store_artifacts: 
           path: target/surefire-reports
           destination: tr1
