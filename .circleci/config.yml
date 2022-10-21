@@ -26,9 +26,9 @@ jobs:
       #ENV_UP: << parameters.ENV >>
      # Browser_UP: << parameters.Browser >>
       #Tag_UP: << parameters.Tag >>
-      ENV: 'stage_up' 
-      Browser: 'ff'
-      Tag: '@UP_signIn'
+      #ENV: 'stage_up' 
+      #Browser: 'ff'
+      #Tag: '@UP_signIn'
     steps:
       - checkout
       # Download and cache dependencies
@@ -57,7 +57,7 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
       # run tests!
       #- run: sudo safaridriver --enable
-      - run: mvn clean verify -Dthreads=single -Denv=<< parameters.ENV >> -Dbrowser=<< parameters.Browser >> -Dcucumber.filter.tags=<< parameters.Tag >> -Dmaven.test.failure.ignore=true
+      - run: mvn clean verify -Dthreads=single -Denv=<<parameters.ENV>> -Dbrowser=<<parameters.Browser>> -Dcucumber.filter.tags=<<parameters.Tag>> -Dmaven.test.failure.ignore=true
       - store_artifacts: 
           path: target/surefire-reports
           destination: tr1
