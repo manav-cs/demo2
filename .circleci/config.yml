@@ -54,7 +54,7 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
       # run tests!
       #- run: sudo safaridriver --enable
-      - run: mvn clean verify -Dthreads=single -Denv=${ENV_UP} -Dbrowser=${Browser_UP} -Dcucumber.filter.tags="${Tag_UP}" -Dmaven.test.failure.ignore=true
+      - run: mvn clean verify -Dthreads=single -Denv=${ENV} -Dbrowser=${Browser} -Dcucumber.filter.tags="${Tag}" -Dmaven.test.failure.ignore=true
       - store_artifacts: 
           path: target/surefire-reports
           destination: tr1
