@@ -10,22 +10,25 @@ jobs:
     working_directory: ~/demo2
     #parallelism: 
     resource_class: large
-    parameters:
-      ENV:
-        type: string
+    #parameters:
+      #ENV:
+        #type: string
         #default: "stage_up"
-      Browser:
-        type: string
+      #Browser:
+        #type: string
         #default: "ch"
-      Tag:
-        type: string
+      #Tag:
+        #type: string
         #default: "@UP_signIn"
     environment:
       # Customize the JVM maximum heap limit
       MAVEN_OPTS: -Xmx3200m   
-      ENV_UP: << parameters.ENV >>
-      Browser_UP: << parameters.Browser >>
-      Tag_UP: << parameters.Tag >>
+      #ENV_UP: << parameters.ENV >>
+     # Browser_UP: << parameters.Browser >>
+      #Tag_UP: << parameters.Tag >>
+      ENV: 'stage_up' 
+      Browser: 'ff'
+      Tag: '@UP_signIn'
     steps:
       - checkout
       # Download and cache dependencies
