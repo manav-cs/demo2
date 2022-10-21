@@ -1,5 +1,4 @@
 version: 2
-setup: true
 jobs:
   build:
     machine:
