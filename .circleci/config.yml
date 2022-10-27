@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 parameters:
       ENV:
         type: string
@@ -24,9 +24,9 @@ jobs:
     environment:
       # Customize the JVM maximum heap limit
       MAVEN_OPTS: -Xmx3200m   
-      #ENV_UP: << pipeline.parameters.ENV >>
-      #Browser_UP: << pipeline.parameters.Browser >>
-     # Tag_UP: << pipeline.parameters.Tag >>
+      ENV_UP: '<< pipeline.parameters.ENV >>'
+      Browser_UP: '<< pipeline.parameters.Browser >>'
+      Tag_UP: '<< pipeline.parameters.Tag >>'
       #ENV: 'stage_up' 
       #Browser: 'ff'
       #Tag: '@UP_signIn'
@@ -58,7 +58,7 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
       # run tests!
       #- run: sudo safaridriver --enable
-      - run: mvn clean verify -Dthreads=single -Denv=<< pipeline.parameters.ENV >> -Dbrowser=<< pipeline.parameters.Browser >> -Dcucumber.filter.tags=<< pipeline.parameters.Tag >> -Dmaven.test.failure.ignore=true
+      - run: mvn clean verify -Dthreads=single -Denv=${ENV_UP} -Dbrowser=${Browser_UP} -Dcucumber.filter.tags=${Tag_UP} -Dmaven.test.failure.ignore=true
       - store_artifacts: 
           path: target/surefire-reports
           destination: tr1
