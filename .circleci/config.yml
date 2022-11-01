@@ -24,6 +24,7 @@ jobs:
       ENV_UP: '<< pipeline.parameters.ENV >>'
       Browser_UP: '<< pipeline.parameters.Browser >>'
       Tag_UP: '<< pipeline.parameters.Tag >>'
+      TEST_DATABASE_URL: jdbc:postgresql://carsaver-beta-cluster.cluster-ctqmxtymvucy.us-east-1.rds.amazonaws.com:5432/carsaver_staging
       #ENV: 'stage_up' 
       #Browser: 'ff'
       #Tag: '@UP_signIn'
@@ -57,6 +58,9 @@ jobs:
       #- run: sudo safaridriver --enable
       - run: sudo apt-get update
       - run: sudo apt-get install postgresql-client
+      - run: |
+          psql \
+          -d $TEST_DATABASE_URL \
       - run: mvn clean verify -Dthreads=single -Denv=${ENV_UP} -Dbrowser=${Browser_UP} -Dcucumber.filter.tags=${Tag_UP} -Dmaven.test.failure.ignore=true
       - store_artifacts: 
           path: target/surefire-reports
