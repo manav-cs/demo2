@@ -8,7 +8,7 @@ parameters:
         default: "ff"
       Tag:
         type: string
-        default: "@UP_signIn"
+        default: "@UP_pin"
 jobs:
   build:
     machine:
