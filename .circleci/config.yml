@@ -14,9 +14,6 @@ jobs:
     machine:
       image: ubuntu-2004:current
       docker_layer_caching: true
-    #Docker:
-     # - image: cimg/go:1.17
-      #- image: cimg/postgres:14.5.0
     working_directory: ~/demo2
     #parallelism: 
     resource_class: large
@@ -58,6 +55,8 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
       # run tests!
       #- run: sudo safaridriver --enable
+      - run: sudo apt-get update
+      - run: sudo apt-get install postgresql-client
       - run: mvn clean verify -Dthreads=single -Denv=${ENV_UP} -Dbrowser=${Browser_UP} -Dcucumber.filter.tags=${Tag_UP} -Dmaven.test.failure.ignore=true
       - store_artifacts: 
           path: target/surefire-reports
