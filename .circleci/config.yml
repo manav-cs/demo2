@@ -211,7 +211,7 @@ workflows:
   send-notification:
     jobs:
       - notify:
-          context: slack-contexts
+          context: Slack
 nightly:
      triggers:
       - schedule:
