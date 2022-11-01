@@ -1,46 +1,64 @@
 version: 2.1
+orbs:
+  slack: circleci/slack@4.9.3
 parameters:
-      ENV:
+      ENV_UP:
         type: string
         default: "stage_up"
-      Browser:
+      Browser_UP:
+        type: string
+        default: "ch"
+      Tag_UP:
+        type: string
+        default: "@UP_signIn"
+      ENV_CS:
+        type: string
+        default: "stage_cse"
+      Browser_CS:
         type: string
         default: "ff"
-      Tag:
+      Tag_CS:
         type: string
-        default: "@UP_pin"
+        default: "@CSE_signIn"
+      ENV_NE:
+        type: string
+        default: "stage_ne"
+      Browser_NE:
+        type: string
+        default: "ff"
+      Tag_NE:
+        type: string
+        default: "@NE_signIn"      
 jobs:
-  build:
+  UP_test:
     machine:
-      image: ubuntu-2004:current
+      image: ubuntu-2004:current 
       docker_layer_caching: true
-    working_directory: ~/demo2
-    #parallelism: 
+      #Docker:
+      # - image: cimg/go:1.17
+      #- image: cimg/postgres:14.
+    working_directory: ~/develop
+    #parallelism:
     resource_class: large
-
     environment:
       # Customize the JVM maximum heap limit
-      MAVEN_OPTS: -Xmx3200m   
-      ENV_UP: '<< pipeline.parameters.ENV >>'
-      Browser_UP: '<< pipeline.parameters.Browser >>'
-      Tag_UP: '<< pipeline.parameters.Tag >>'
-      TEST_DATABASE_URL: jdbc:postgresql://carsaver-beta-cluster.cluster-ctqmxtymvucy.us-east-1.rds.amazonaws.com:5432/carsaver_staging
-      #ENV: 'stage_up' 
-      #Browser: 'ff'
-      #Tag: '@UP_signIn'
+      MAVEN_OPTS: -Xmx3200m
+      ENV_UPs: '<< pipeline.parameters.ENV_UP >>'
+      Browser_UPs: '<< pipeline.parameters.Browser_UP >>'
+      Tag_UPs: '<< pipeline.parameters.Tag_UP >>'
     steps:
       - checkout
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "pom.xml" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-      - run: mvn dependency:go-offline  
-      #- run: circleci tests glob "**/*.rb" | circleci tests split --split-by=timings --time-default=10s 
-      #- run: sudo apt update && sudo apt install wget 
+            - v1-dependencies-{{ checksum "pom.xml" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run: mvn dependency:go-offline
+      #- run: circleci tests glob "**/*.rb" | circleci tests split --split-by=timings --time-default=10s
+      #- run: sudo apt update && sudo apt install wget
       #- run: wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-      #- run: sudo apt install ./google-chrome-stable_current_amd64.deb 
+      #- run: sudo apt install ./google-chrome-stable_current_amd64.deb
       #- run: apt install chromium-chromedriver
       #- run: google-chrome --version
       - run:
@@ -55,15 +73,150 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
       # run tests!
-      #- run: sudo safaridriver --enable
-      - run: sudo apt-get update
-      - run: sudo apt-get install postgresql-client
-      - run: |
-          psql \
-          -d $TEST_DATABASE_URL \
-      - run: mvn clean verify -Dthreads=single -Denv=${ENV_UP} -Dbrowser=${Browser_UP} -Dcucumber.filter.tags=${Tag_UP} -Dmaven.test.failure.ignore=true
-      - store_artifacts: 
-          path: target/surefire-reports
+      - run: mvn clean verify -Dthreads=single -Denv=${ENV_UPs} -Dbrowser=${Browser_UPs} -Dcucumber.filter.tags="${Tag_UPs}" -Dmaven.test.failure.ignore=true
+      - store_artifacts:
+          path: target/cucumber-report-html/cucumber-html-reports
           destination: tr1
       - store_test_results:
-          path: target/surefire-reports
+          path: target/cucumber-report-html/cucumber-html-reports
+  CS_test:
+    machine:
+      image: ubuntu-2004:current
+      docker_layer_caching: true
+      #Docker:
+      # - image: cimg/go:1.17
+      #- image: cimg/postgres:14.
+    working_directory: ~/develop
+    #parallelism:
+    resource_class: large
+    environment:
+      # Customize the JVM maximum heap limit
+      MAVEN_OPTS: -Xmx3200m
+      ENV_CSs: '<< pipeline.parameters.ENV_CS >>'
+      Browser_CSs: '<< pipeline.parameters.Browser_CS >>'
+      Tag_CSs: '<< pipeline.parameters.Tag_CS >>'
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "pom.xml" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run: mvn dependency:go-offline
+      #- run: circleci tests glob "**/*.rb" | circleci tests split --split-by=timings --time-default=10s
+      #- run: sudo apt update && sudo apt install wget
+      #- run: wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+      #- run: sudo apt install ./google-chrome-stable_current_amd64.deb
+      #- run: apt install chromium-chromedriver
+      #- run: google-chrome --version
+      - run:
+          name: Running X virtual framebuffer
+          command: Xvfb :0 -ac &
+      - run:
+          name: Run Tests
+          command: |
+            export DISPLAY=:99
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "pom.xml" }}
+      # run tests!
+      - run: mvn clean verify -Dthreads=single -Denv=${ENV_CSs} -Dbrowser=${Browser_CSs} -Dcucumber.filter.tags="${Tag_CSs}" -Dmaven.test.failure.ignore=true
+      - store_artifacts:
+          path: target/cucumber-report-html/cucumber-html-reports
+          destination: tr1
+      - store_test_results:
+          path: target/cucumber-report-html/cucumber-html-reports
+  NE_test:
+    machine:
+      image: ubuntu-2004:current
+      docker_layer_caching: true
+      #Docker:
+      # - image: cimg/go:1.17
+      #- image: cimg/postgres:14.
+    working_directory: ~/develop
+    #parallelism:
+    resource_class: large
+    environment:
+      # Customize the JVM maximum heap limit
+      MAVEN_OPTS: -Xmx3200m
+      ENV_NEs: '<< pipeline.parameters.ENV_NE >>'
+      Browser_NEs: '<< pipeline.parameters.Browser_NE >>'
+      Tag_NEs: '<< pipeline.parameters.Tag_NE >>'
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "pom.xml" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run: mvn dependency:go-offline
+      #- run: circleci tests glob "**/*.rb" | circleci tests split --split-by=timings --time-default=10s
+      #- run: sudo apt update && sudo apt install wget
+      #- run: wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+      #- run: sudo apt install ./google-chrome-stable_current_amd64.deb
+      #- run: apt install chromium-chromedriver
+      #- run: google-chrome --version
+      - run:
+          name: Running X virtual framebuffer
+          command: Xvfb :0 -ac &
+      - run:
+          name: Run Tests
+          command: |
+            export DISPLAY=:99
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "pom.xml" }}
+      # run tests!
+      - run: mvn clean verify -Dthreads=single -Denv=${ENV_NEs} -Dbrowser=${Browser_NEs} -Dcucumber.filter.tags="${Tag_NEs}" -Dmaven.test.failure.ignore=true
+      - store_artifacts:
+          path: target/cucumber-report-html/cucumber-html-reports
+          destination: tr1
+      - store_test_results:
+          path: target/cucumber-report-html/cucumber-html-reports
+  jobs:
+  notify:
+    docker:
+      - image: 'cimg/base:stable'
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+    steps:
+      - slack/notify:
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*This is a text notification*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+          event: always
+workflows:
+  test:
+    jobs:
+      - UP_test
+      - CS_test
+      - NE_test
+  send-notification:
+    jobs:
+      - notify:
+          context: slack-contexts
+nightly:
+     triggers:
+      - schedule:
+         cron: "0 0 * * *"
+         filters:
+           branches:
+             only:
+               - develop
