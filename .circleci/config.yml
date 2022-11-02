@@ -42,6 +42,7 @@ jobs:
         auth:
           username: mydockerhub-user
           password: $DOCKERHUB_PASSWORD
+      - image: circleci/openjdk:11-jdk
     working_directory: ~/develop
     #parallelism:
     resource_class: large
