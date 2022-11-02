@@ -31,12 +31,17 @@ parameters:
         default: "@NE_signIn"      
 jobs:
   UP_test:
-    machine:
-      image: ubuntu-2004:current 
-      docker_layer_caching: true
-      #Docker:
-      # - image: cimg/go:1.17
+    #machine:
+      #image: ubuntu-2004:current 
+      #docker_layer_caching: true
+    #docker:
+       #- image: cimg/go:1.17
       #- image: cimg/postgres:14.
+    docker: # executor type
+      - image: cimg/base:stable # primary container will run the latest, production-ready base image
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD
     working_directory: ~/develop
     #parallelism:
     resource_class: large
