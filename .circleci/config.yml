@@ -209,20 +209,16 @@ jobs:
             }
           event: always
 workflows:
-  test:
-    jobs:
-      - UP_test
-      - CS_test
-      - NE_test
-  send-notification:
-    jobs:
-      - notify:
-          context: Slack
-nightly:
-     triggers:
-      - schedule:
-         cron: "0 0 * * *"
-         filters:
-           branches:
-             only:
-               - develop
+    UP_test:
+      jobs:
+        - UP_test
+    NE_test:
+      jobs:
+        - NE_test
+    CSE_test:
+      jobs:
+        - CS_test
+  #send-notification:
+    #jobs:
+      #- notify:
+          #context: Slack
